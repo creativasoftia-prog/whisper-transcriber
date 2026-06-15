@@ -1,5 +1,6 @@
 {
   "name": "whisper-transcriber-frontend",
+  "type": "module",
   "version": "1.0.0",
   "description": "Frontend para transcripción de audio con Whisper",
   "scripts": {
