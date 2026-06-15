@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String?
+  googleId     String?
+  role         Role     @default(USER)
+  customApiKey String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  files        FileRecord[]
+  processes    ProcessHistory[]
+}
+
+model FileRecord {
+  id          String   @id @default(uuid())
+  userId      String
+  fileName    String
+  fileUrl     String
+  storageType StorageType
+  expiresAt   DateTime?
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model ProcessHistory {
+  id          String   @id @default(uuid())
+  userId      String
+  processType ProcessType
+  status      String
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum StorageType {
+  TEMPORARY
+  PERMANENT
+}
+
+enum ProcessType {
+  TRANSCRIPTION
+  TTS
+  TRANSLATION
+  VIDEO
+}
